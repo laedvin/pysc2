@@ -1028,8 +1028,12 @@ class Features(object):
 
     if aif.use_raw_units:
       with sw("raw_units"):
-        raw_units = [full_unit_vec(u, self._world_to_world_tl, is_raw=True)
-                     for u in raw.units]
+        self._update_camera(point.Point.build(raw.player.camera))
+        raw_units = []
+        for u in raw.units:
+          if u.display_type != sc_raw.Hidden:
+            raw_units.append(
+                full_unit_vec(u, self._world_to_feature_screen_px))
         out["raw_units"] = named_array.NamedNumpyArray(
             raw_units, [None, FeatureUnit], dtype=np.int32)
 
